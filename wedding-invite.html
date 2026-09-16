@@ -9,9 +9,14 @@
   html,body{height:100%;background:#07060a;overflow:hidden;}
 
   #stage{
-    position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);
-    width:100%;max-width:560px;overflow:hidden;
+    position:fixed;top:0;left:0;right:0;margin:0 auto;
+    width:100%;max-width:560px;
+    height:100vh;
+    overflow:hidden;
     box-shadow:0 0 70px rgba(0,0,0,.75);
+  }
+  @supports (height:100svh){
+    #stage{height:100svh;}
   }
   .slide{
     position:absolute;inset:0;opacity:0;
@@ -25,8 +30,8 @@
     animation:bgmove 22s ease-in-out infinite alternate;
   }
   .fg{
-    position:absolute;inset:0;
-    width:100%;height:100%;object-fit:contain;display:block;
+    position:absolute;top:2.5%;left:2.5%;
+    width:95%;height:95%;object-fit:contain;display:block;
     animation:float 11s ease-in-out infinite alternate;
   }
   @keyframes bgmove{from{transform:scale(1.04);}to{transform:scale(1.18);}}
@@ -75,6 +80,25 @@
   <div id="musicBtn" class="muted">♫</div>
 
 <script>
+  var stage = document.getElementById('stage');
+
+  function fitStage(){
+    var vv = window.visualViewport;
+    var h = (vv && vv.height) ? vv.height : window.innerHeight;
+    if(h > 0){
+      stage.style.height = h + 'px';
+    }
+  }
+
+  fitStage();
+  window.addEventListener('resize', fitStage);
+  window.addEventListener('orientationchange', fitStage);
+  window.addEventListener('pageshow', fitStage);
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', fitStage);
+    window.visualViewport.addEventListener('scroll', fitStage);
+  }
+
   var slides = document.querySelectorAll('.slide');
   var idx = 0;
 
